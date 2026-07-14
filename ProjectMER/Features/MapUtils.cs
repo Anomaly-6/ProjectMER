@@ -55,7 +55,7 @@ public static class MapUtils
 				    BlockType.CullingParent or
 				    BlockType.KillBox or
                     BlockType.CustomRoomIdentifier or
-					BlockType.CustomZoneIdentifier)) 
+					BlockType.CustomZoneIdentifier)
 					continue;
 				var transform = mapObject.GetComponent<SchematicObject>().ObjectFromId[block.ObjectId];
 				Room room = RoomExtensions.GetRoomAtPosition(transform.position);
