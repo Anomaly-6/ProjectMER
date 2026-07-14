@@ -97,6 +97,9 @@ public class SchematicBlockData
 			BlockType.Clutter => CreateClutter(),
 			BlockType.Trigger => CreateTrigger(schematicObject),
 			BlockType.AudioPlayer => CreateAudioPlayer(schematicObject),
+			BlockType.KillBox => CreateKillBox(),
+            BlockType.CustomRoomIdentifier => CreateCustomRoomIdentifier(),
+            BlockType.CustomZoneIdentifier => CreateCustomZoneIdentifier(),
 			_ => CreateEmpty(fallback: true)
 		};
 		
@@ -699,4 +702,62 @@ public class SchematicBlockData
 		schematicObject.AudioPlayerSettingsByObjectId.Add(ObjectId, settings);
 		return gameObject;
 	}
+
+	    private GameObject CreateKillBox()
+    {
+        GameObject gameObject = new("KillBox");
+
+        PrimitiveType primitiveType = (PrimitiveType)Convert.ToInt32(Properties["PrimitiveType"]);
+
+        Collider collider = primitiveType switch
+        {
+            PrimitiveType.Sphere => gameObject.AddComponent<SphereCollider>(),
+            PrimitiveType.Capsule => gameObject.AddComponent<CapsuleCollider>(),
+            PrimitiveType.Cylinder => gameObject.AddComponent<CapsuleCollider>(),
+            _ => gameObject.AddComponent<BoxCollider>()
+        };
+
+        collider.isTrigger = true;
+
+        gameObject.layer = LayerMask.NameToLayer("InvisibleCollider");
+
+        KillBoxObject killBox = gameObject.AddComponent<KillBoxObject>();
+        killBox.DeathReason = Properties["DeathReason"].ToString();
+
+        return gameObject;
+    }
+
+    private GameObject CreateCustomRoomIdentifier()
+    {
+        GameObject gameObject = new("CustomRoomIdentifier");
+
+        BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+        collider.isTrigger = true;
+
+        CustomRoomIdentifierObject roomIdentifier = gameObject.AddComponent<CustomRoomIdentifierObject>();
+
+        if (Properties.TryGetValue("RoomName", out object roomName) && roomName != null)
+            roomIdentifier.RoomName = roomName.ToString();
+        else
+            roomIdentifier.RoomName = "Unnamed";
+
+        return gameObject;
+    }
+
+    private GameObject CreateCustomZoneIdentifier()
+    {
+        GameObject gameObject = new("CustomZoneIdentifier");
+
+        BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+        collider.isTrigger = true;
+
+        CustomZoneIdentifierObject zoneIdentifier = gameObject.AddComponent<CustomZoneIdentifierObject>();
+
+        if (Properties.TryGetValue("ZoneName", out object zoneName) && zoneName != null)
+            zoneIdentifier.ZoneName = zoneName.ToString();
+        else
+            zoneIdentifier.ZoneName = "Unnamed";
+
+        return gameObject;
+    }
 }
