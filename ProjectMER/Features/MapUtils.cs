@@ -52,7 +52,10 @@ public static class MapUtils
 				    BlockType.MirrorPrefab or 
 				    BlockType.PlayerBlocker or 
 				    BlockType.Trigger or
-				    BlockType.CullingParent) 
+				    BlockType.CullingParent or
+				    BlockType.KillBox or
+                    BlockType.CustomRoomIdentifier or
+					BlockType.CustomZoneIdentifier)) 
 					continue;
 				var transform = mapObject.GetComponent<SchematicObject>().ObjectFromId[block.ObjectId];
 				Room room = RoomExtensions.GetRoomAtPosition(transform.position);
