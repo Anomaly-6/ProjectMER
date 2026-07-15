@@ -9,10 +9,10 @@ public class KillBoxObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player"))
-            return;
-
         Player? player = Player.Get(other.gameObject);
+
+        if (player is null && other.transform.root != other.transform)
+            player = Player.Get(other.transform.root.gameObject);
 
         if (player is { IsAlive: true })
             player.Kill(DeathReason);
