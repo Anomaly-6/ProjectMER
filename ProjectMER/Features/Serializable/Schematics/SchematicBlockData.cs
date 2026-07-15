@@ -703,7 +703,7 @@ public class SchematicBlockData
 		return gameObject;
 	}
 
-	    private GameObject CreateKillBox()
+	private GameObject CreateKillBox()
     {
         GameObject gameObject = new("KillBox");
 
@@ -718,8 +718,6 @@ public class SchematicBlockData
         };
 
         collider.isTrigger = true;
-
-        gameObject.layer = LayerMask.NameToLayer("InvisibleCollider");
 
         KillBoxObject killBox = gameObject.AddComponent<KillBoxObject>();
         killBox.DeathReason = Properties["DeathReason"].ToString();
